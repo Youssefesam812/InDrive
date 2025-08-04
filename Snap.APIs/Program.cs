@@ -28,7 +28,13 @@ namespace Snap.APIs
 
             // Configure DbContext
             builder.Services.AddDbContext<SnapDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5, 
+                        maxRetryDelay: TimeSpan.FromSeconds(30), 
+                        errorNumbersToAdd: null); 
+                })
             );
 
             // Configure Identity Services
