@@ -20,7 +20,7 @@ namespace Snap.Repository.Seeders
 
                 var user1 = new User()
                 {
-                    FullName = "youssef_essam ",
+                    DispalyName = "youssef_essam ",
                     UserName = "youssefessam",
                     Email = "youssefessam@gmail.com",
                     PhoneNumber = "1234567890"

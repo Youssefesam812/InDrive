@@ -30,7 +30,7 @@ namespace Snap.Service.Token
 
             var AuthClaims = new List<Claim>()
             {
-                new Claim(ClaimTypes.GivenName , user.FullName),
+                new Claim(ClaimTypes.GivenName , user.DispalyName),
 
                 new Claim(ClaimTypes.Email , user.Email)
             };

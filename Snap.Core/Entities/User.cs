@@ -9,7 +9,7 @@ namespace Snap.Core.Entities
 {
     public class User : IdentityUser
     {
-        public string FullName { get; set; }
+        public string DispalyName { get; set; }
         // Navigation property to About (1:1)
         
     }

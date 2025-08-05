@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Snap.APIs.DTOs
 {
     public class LoginDto
     {
         [Required]
-        public string EmailOrPhone { get; set; } 
-
+        [EmailAddress]
+        public string Email { get; set; }
         [Required]
-        [DataType(DataType.Password)]
+        [PasswordPropertyText]
         public string Password { get; set; }
     }
 }
