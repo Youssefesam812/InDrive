@@ -10,7 +10,11 @@ namespace Snap.APIs.DTOs
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        public string DispalyName { get; set; }
+        public string FullName { get; set; }
+
+        [Required]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be exactly 11 digits.")]
+        public string PhoneNumber { get; set; }
 
         [Required]
         [RegularExpression(
