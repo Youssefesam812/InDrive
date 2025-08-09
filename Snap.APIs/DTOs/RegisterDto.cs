@@ -24,7 +24,8 @@ namespace Snap.APIs.DTOs
         [JsonPropertyName("password")] 
         public string password { get; set; }
 
-
-
+        [Required]
+        [RegularExpression("^(driver|passenger)$", ErrorMessage = "UserType must be either 'driver' or 'passenger'.")]
+        public string UserType { get; set; }
     }
 }

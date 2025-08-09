@@ -29,6 +29,8 @@ namespace Snap.Repository.Data
 
  // DbSet properties for each entity
         public DbSet<User> Users { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<CarData> CarDatas { get; set; }
 
     }
 }
