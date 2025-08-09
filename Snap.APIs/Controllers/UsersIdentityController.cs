@@ -101,7 +101,8 @@ namespace Snap.APIs.Controllers
                 FullName = model.FullName,
                 Email = model.Email,
                 UserName = model.Email.Split('@')[0],
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                UserType = model.UserType // Set user type
             };
             var result = await _userManager.CreateAsync(user, model.password);
             if (!result.Succeeded) { return BadRequest(new ApiResponse(400)); }
@@ -111,7 +112,8 @@ namespace Snap.APIs.Controllers
                 DispalyName = user.FullName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Token = await _tokenService.CreateTokenAsync(user , _userManager)
+                Token = await _tokenService.CreateTokenAsync(user , _userManager),
+                UserType = user.UserType
             };
             _otpStore.TryRemove(model.PhoneNumber, out _);
             return Ok(ReturnedUser);
@@ -140,7 +142,8 @@ namespace Snap.APIs.Controllers
                 DispalyName = user.FullName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Token = await _tokenService.CreateTokenAsync(user, _userManager)
+                Token = await _tokenService.CreateTokenAsync(user, _userManager),
+                UserType = user.UserType // Return user type in login
             });
         }
         [HttpDelete("Delete/{userId}")]
