@@ -10,7 +10,6 @@ namespace Snap.Core.Entities
     public class User : IdentityUser
     {
         public string FullName { get; set; }
-        // Navigation property to About (1:1)
-        
+        public string UserType { get; set; } // Add UserType property (e.g., "Driver", "Passenger")
     }
 }
