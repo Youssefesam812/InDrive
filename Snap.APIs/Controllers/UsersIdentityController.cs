@@ -24,20 +24,23 @@ namespace Snap.APIs.Controllers
         private readonly ITokenService _tokenService;
         private readonly SnapDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IPasswordHasher<User> _passwordHasher;
         private static readonly ConcurrentDictionary<string, (string Otp, DateTime Expiry, bool Verified)> _otpStore = new();
         private static readonly TimeSpan OtpLifetime = TimeSpan.FromMinutes(5);
 
         public UsersIdentityController(UserManager<User>userManager ,
-            SignInManager<User> signInManager , 
+            SignInManager<User> signInManager, 
             ITokenService tokenService,
             SnapDbContext context,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IPasswordHasher<User> passwordHasher)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _context = context;
             _configuration = configuration;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpPost("SendOtp")]
@@ -81,10 +84,10 @@ namespace Snap.APIs.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto model)
         {
-            if (!_otpStore.TryGetValue(model.PhoneNumber, out var entry) || !entry.Verified)
-            {
-                return BadRequest(new ApiResponse(400, "Phone number not verified by OTP."));
-            }
+            //if (!_otpStore.TryGetValue(model.PhoneNumber, out var entry) || !entry.Verified)
+            //{
+            //    return BadRequest(new ApiResponse(400, "Phone number not verified by OTP."));
+            //}
             var existingUserByEmail = await _userManager.FindByEmailAsync(model.Email);
             if (existingUserByEmail != null)
             {
@@ -119,23 +122,24 @@ namespace Snap.APIs.Controllers
             return Ok(ReturnedUser);
         }
         //login 
-        [HttpPost ("Login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
         {
-            var user = await _userManager.FindByEmailAsync(model.EmailOrPhone);
+            var user = await _userManager.FindByEmailAsync(model.EmailOrPhone)
+                       ?? await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == model.EmailOrPhone);
+
             if (user == null)
             {
-                user = _userManager.Users.FirstOrDefault(u => u.PhoneNumber == model.EmailOrPhone);
+                return Unauthorized(new ApiResponse(401, "Invalid email or phone number."));
             }
-            if (user == null)
-            {
-                return Unauthorized(new ApiResponse(401));
-            }
+
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
             if (!result.Succeeded)
             {
-                return Unauthorized(new ApiResponse(401));
+                return Unauthorized(new ApiResponse(401, "Invalid password."));
             }
+
             return Ok(new UserDto
             {
                 UserId = user.Id,
@@ -143,9 +147,11 @@ namespace Snap.APIs.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Token = await _tokenService.CreateTokenAsync(user, _userManager),
-                UserType = user.UserType // Return user type in login
+                UserType = user.UserType
             });
         }
+
+
         [HttpDelete("Delete/{userId}")]
         public async Task<ActionResult> DeleteUser(string userId)
         {
@@ -206,16 +212,16 @@ namespace Snap.APIs.Controllers
         [HttpPost("ResetPassword")]
         public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
-            if (!_otpStore.TryGetValue($"reset_{dto.PhoneNumber}", out var entry) || !entry.Verified)
-                return BadRequest(new ApiResponse(400, "OTP not verified for this phone number."));
-            var user = _userManager.Users.FirstOrDefault(u => u.PhoneNumber == dto.PhoneNumber);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user == null)
-                return BadRequest(new ApiResponse(400, "No user found with this phone number."));
+                return BadRequest(new ApiResponse(400, "No user found with this email."));
+
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
+
             if (!result.Succeeded)
                 return BadRequest(new ApiResponse(400, "Failed to reset password."));
-            _otpStore.TryRemove($"reset_{dto.PhoneNumber}", out _);
+
             return Ok(new { message = "Password reset successful." });
         }
     }
