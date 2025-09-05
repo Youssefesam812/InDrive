@@ -49,7 +49,9 @@ namespace Snap.APIs.Controllers
         {
             var driver = await _context.Drivers.FirstOrDefaultAsync(d => d.UserId == userId);
             if (driver == null) return NotFound();
-            var avg = (double)driver.TotalReview / driver.NoReviews;
+            double avg = 0;
+            if (driver.NoReviews > 0)
+                avg = (double)driver.TotalReview / driver.NoReviews;
             if (avg > 5) avg = 5;
             var dto = new DriverDto
             {
@@ -68,8 +70,9 @@ namespace Snap.APIs.Controllers
                 Password = driver.Password,
                 LicenseExpiryDate = driver.LicenseExpiryDate,
                 UserId = driver.UserId,
-                Status = driver.Status.ToString(),
-                Review = avg
+                Status = driver.Status,
+                Review = avg,
+                Wallet = driver.Wallet
             };
             return Ok(dto);
         }

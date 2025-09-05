@@ -9,7 +9,7 @@ namespace Snap.Core.Entities
         public int Id { get; set; }
         public int DriverId { get; set; }
         public string Name { get; set; }
-        public decimal Value { get; set; }
+        public double Value { get; set; }
         public string Image { get; set; }
         public Driver Driver { get; set; }
     }
