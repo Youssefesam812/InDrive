@@ -79,12 +79,12 @@ namespace Snap.APIs.Controllers
         {
             var pendingDrivers = await _context.Drivers
                 .Where(d => d.Status == "pending")
-                .Select(d => new DriverDto
+                .Select(d => new PendingDto
                 {
-                    Id = d.Id,
-                    DriverFullname = d.DriverFullname,
-                    Email = d.Email,
-                    Status = d.Status.ToString()
+                    id = d.Id,
+                    driverFullname = d.DriverFullname,
+                    email = d.Email,
+                    status = d.Status.ToString()
                 })
                 .ToListAsync();
             return Ok(pendingDrivers);
