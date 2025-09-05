@@ -31,6 +31,7 @@ namespace Snap.Repository.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<CarData> CarDatas { get; set; }
+        public DbSet<Charge> Charges { get; set; } 
 
     }
 }

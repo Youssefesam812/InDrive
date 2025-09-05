@@ -23,5 +23,9 @@ namespace Snap.Core.Entities
         // Foreign key to User
         public string UserId { get; set; }
         public User User { get; set; }
+        public string Status { get; set; } = "pending";
+        public int TotalReview { get; set; }
+        public int NoReviews { get; set; }
+        public decimal Wallet { get; set; } 
     }
 }

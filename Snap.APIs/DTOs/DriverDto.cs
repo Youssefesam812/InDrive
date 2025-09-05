@@ -19,5 +19,7 @@ namespace Snap.APIs.DTOs
         public string Password { get; set; }
         public DateTime LicenseExpiryDate { get; set; }
         public string UserId { get; set; }
+        public string Status { get; set; }
+        public double Review { get; set; }
     }
 }
