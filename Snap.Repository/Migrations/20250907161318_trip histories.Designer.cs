@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Snap.Repository.Data;
 
@@ -11,9 +12,11 @@ using Snap.Repository.Data;
 namespace Snap.Repository.Migrations
 {
     [DbContext(typeof(SnapDbContext))]
-    partial class SnapDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250907161318_trip histories")]
+    partial class triphistories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,52 +313,6 @@ namespace Snap.Repository.Migrations
                     b.ToTable("Drivers");
                 });
 
-            modelBuilder.Entity("Snap.Core.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Distance")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ExpectedPrice")
-                        .HasColumnType("float");
-
-                    b.Property<string>("From")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NoPassengers")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PassengerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("To")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PassengerId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("Snap.Core.Entities.TripsHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -378,8 +335,9 @@ namespace Snap.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Review")
-                        .HasColumnType("int");
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("To")
                         .IsRequired()
@@ -550,17 +508,6 @@ namespace Snap.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Snap.Core.Entities.Order", b =>
-                {
-                    b.HasOne("Snap.Core.Entities.User", "Passenger")
-                        .WithMany()
-                        .HasForeignKey("PassengerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Passenger");
                 });
 
             modelBuilder.Entity("Snap.Core.Entities.TripsHistory", b =>
