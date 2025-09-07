@@ -5,6 +5,7 @@ using Snap.Repository.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Snap.APIs.Errors;
 
 namespace Snap.APIs.Controllers
 {
@@ -19,7 +20,7 @@ namespace Snap.APIs.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDriver([FromBody] DriverDto dto)
+        public async Task<IActionResult> CreateDriver([FromBody] CreateDriver dto)
         {
             var driver = new Driver
             {
@@ -36,7 +37,8 @@ namespace Snap.APIs.Controllers
                 Email = dto.Email,
                 Password = dto.Password,
                 LicenseExpiryDate = dto.LicenseExpiryDate,
-                UserId = dto.UserId
+                UserId = dto.UserId ,
+                Status = "pending",
             };
             _context.Drivers.Add(driver);
             await _context.SaveChangesAsync();
@@ -48,7 +50,7 @@ namespace Snap.APIs.Controllers
         public async Task<ActionResult<DriverDto>> GetDriverByUserId(string userId)
         {
             var driver = await _context.Drivers.FirstOrDefaultAsync(d => d.UserId == userId);
-            if (driver == null) return NotFound();
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
             double avg = 0;
             if (driver.NoReviews > 0)
                 avg = (double)driver.TotalReview / driver.NoReviews;
@@ -97,11 +99,11 @@ namespace Snap.APIs.Controllers
         public async Task<IActionResult> ChangeDriverStatus(int id, [FromBody] ChangeDriverStatusDto dto)
         {
             var driver = await _context.Drivers.FindAsync(id);
-            if (driver == null) return NotFound();
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
 
             var allowed = new[] { "pending", "approved", "reject" };
             if (string.IsNullOrWhiteSpace(dto.Status) || !allowed.Contains(dto.Status.ToLower()))
-                return BadRequest("Invalid status value. Allowed: pending, approved, reject.");
+                return BadRequest(new ApiResponse(400, "Invalid status value. Allowed: pending, approved, reject."));
 
             driver.Status = dto.Status.ToLower();
             await _context.SaveChangesAsync();
@@ -112,10 +114,10 @@ namespace Snap.APIs.Controllers
         public async Task<IActionResult> AddReview(int id, [FromBody] AddDriverReviewDto dto)
         {
             if (dto.Review < 0 || dto.Review > 5)
-                return BadRequest("Review must be between 0 and 5.");
+                return BadRequest(new ApiResponse(400, "Review must be between 0 and 5."));
 
             var driver = await _context.Drivers.FindAsync(id);
-            if (driver == null) return NotFound();
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
 
             driver.TotalReview += dto.Review;
             driver.NoReviews += 1;
@@ -127,7 +129,7 @@ namespace Snap.APIs.Controllers
         public async Task<IActionResult> GetDriverReview(int id)
         {
             var driver = await _context.Drivers.FindAsync(id);
-            if (driver == null) return NotFound();
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
 
             if (driver.NoReviews == 0) return Ok(0);
 
@@ -141,7 +143,7 @@ namespace Snap.APIs.Controllers
         public async Task<IActionResult> RequestCharge([FromBody] RequestChargeDto dto)
         {
             var driver = await _context.Drivers.FindAsync(dto.DriverId);
-            if (driver == null) return NotFound("Driver not found");
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
             var charge = new Charge
             {
                 DriverId = dto.DriverId,
@@ -167,7 +169,7 @@ namespace Snap.APIs.Controllers
         public async Task<IActionResult> HandleCharge(int id, [FromBody] ChargeActionDto dto)
         {
             var charge = await _context.Charges.Include(c => c.Driver).FirstOrDefaultAsync(c => c.Id == id);
-            if (charge == null) return NotFound("Charge not found");
+            if (charge == null) return NotFound(new ApiResponse(404, "Charge not found"));
             if (dto.Action.ToLower() == "approve")
             {
                 charge.Driver.Wallet += charge.Value;
@@ -183,7 +185,7 @@ namespace Snap.APIs.Controllers
             }
             else
             {
-                return BadRequest("Invalid action. Use 'approve' or 'reject'.");
+                return BadRequest(new ApiResponse(400, "Invalid action. Use 'approve' or 'reject'."));
             }
         }
     }

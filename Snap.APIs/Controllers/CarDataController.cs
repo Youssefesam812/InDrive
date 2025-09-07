@@ -4,6 +4,7 @@ using Snap.APIs.DTOs;
 using Snap.Repository.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Snap.APIs.Errors;
 
 namespace Snap.APIs.Controllers
 {
@@ -41,7 +42,7 @@ namespace Snap.APIs.Controllers
         public async Task<ActionResult<CarDataDto>> GetCarDataByDriverId(int driverId)
         {
             var carData = await _context.CarDatas.FirstOrDefaultAsync(c => c.DriverId == driverId);
-            if (carData == null) return NotFound();
+            if (carData == null) return NotFound(new ApiResponse(404, "Car data not found"));
             var dto = new CarDataDto
             {
                 Id = carData.Id,
