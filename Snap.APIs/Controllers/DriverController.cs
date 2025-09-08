@@ -89,7 +89,8 @@ namespace Snap.APIs.Controllers
                     id = d.Id,
                     driverFullname = d.DriverFullname,
                     email = d.Email,
-                    status = d.Status.ToString()
+                    status = d.Status.ToString(),
+                    userId = d.UserId 
                 })
                 .ToListAsync();
             return Ok(pendingDrivers);

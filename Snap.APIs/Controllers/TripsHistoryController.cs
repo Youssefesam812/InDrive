@@ -6,6 +6,7 @@ using Snap.Repository.Data;
 using Snap.APIs.Errors;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Snap.APIs.Controllers
 {
@@ -99,6 +100,28 @@ namespace Snap.APIs.Controllers
             };
 
             return Ok(dto);
+        }
+
+        // GET: api/TripsHistory/driver/{driverId}
+        [HttpGet("driver/{driverId}")]
+        public async Task<ActionResult<List<TripsHistoryDto>>> GetTripsHistoriesByDriverId(int driverId)
+        {
+            var trips = await _context.TripsHistories
+                .Where(t => t.DriverId == driverId)
+                .Select(t => new TripsHistoryDto
+                {
+                    Id = t.Id,
+                    Review = t.Review,
+                    PaymentWay = t.PaymentWay,
+                    From = t.From,
+                    To = t.To,
+                    Date = t.Date,
+                    TotalTip = t.TotalTip,
+                    DriverId = t.DriverId
+                })
+                .ToListAsync();
+
+            return Ok(trips);
         }
     }
 }
