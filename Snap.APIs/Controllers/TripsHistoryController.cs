@@ -123,5 +123,32 @@ namespace Snap.APIs.Controllers
 
             return Ok(trips);
         }
+
+        // GET: api/TripsHistory/user/{userId}
+        [HttpGet("Driver/{userId}")]
+        public async Task<ActionResult<List<TripsHistoryDto>>> GetTripsHistoriesByUserId(string userId)
+        {
+            // Find the driver with the given userId
+            var driver = await _context.Drivers.FirstOrDefaultAsync(d => d.UserId == userId);
+            if (driver == null)
+                return NotFound(new ApiResponse(404, "Driver not found"));
+
+            var trips = await _context.TripsHistories
+                .Where(t => t.DriverId == driver.Id)
+                .Select(t => new TripsHistoryDto
+                {
+                    Id = t.Id,
+                    Review = t.Review,
+                    PaymentWay = t.PaymentWay,
+                    From = t.From,
+                    To = t.To,
+                    Date = t.Date,
+                    TotalTip = t.TotalTip,
+                    DriverId = t.DriverId
+                })
+                .ToListAsync();
+
+            return Ok(trips);
+        }
     }
 }
