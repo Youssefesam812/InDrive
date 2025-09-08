@@ -4,16 +4,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Snap.Core.Entities
 {
+    public class LatLng
+    {
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+    }
+
     public class Order
     {
         [Key]
         public int Id { get; set; }
 
-        // Link to passenger (AspNetUsers)
+        // Link to user (AspNetUsers)
         [Required]
-        public string PassengerId { get; set; } = null!;
-        [ForeignKey("PassengerId")]
-        public User Passenger { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        [ForeignKey("UserId")]
+        public User User { get; set; } = null!;
 
         public DateTime Date { get; set; }
 
@@ -22,6 +28,9 @@ namespace Snap.Core.Entities
 
         [Required]
         public string To { get; set; } = null!;
+
+        public LatLng FromLatLng { get; set; } = new LatLng();
+        public LatLng ToLatLng { get; set; } = new LatLng();
 
         public double ExpectedPrice { get; set; }
 

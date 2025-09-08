@@ -3,13 +3,21 @@ using System.Text.Json.Serialization;
 
 namespace Snap.APIs.DTOs
 {
+    public class LatLngDto
+    {
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+    }
+
     public class OrderDto
     {
         public int Id { get; set; }
-        public string PassengerId { get; set; } = null!;
+        public string UserId { get; set; } = null!;
         public DateTime Date { get; set; }
         public string From { get; set; } = null!;
         public string To { get; set; } = null!;
+        public LatLngDto FromLatLng { get; set; } = new LatLngDto();
+        public LatLngDto ToLatLng { get; set; } = new LatLngDto();
         public double ExpectedPrice { get; set; }
         public string Type { get; set; } = null!;
         public double Distance { get; set; }
@@ -19,10 +27,12 @@ namespace Snap.APIs.DTOs
 
     public class CreateOrderDto
     {
-        public string PassengerId { get; set; } = null!;
+        public string UserId { get; set; } = null!;
         public DateTime Date { get; set; }
         public string From { get; set; } = null!;
         public string To { get; set; } = null!;
+        public LatLngDto FromLatLng { get; set; } = new LatLngDto();
+        public LatLngDto ToLatLng { get; set; } = new LatLngDto();
         public double ExpectedPrice { get; set; }
         public string Type { get; set; } = null!;
         public double Distance { get; set; }

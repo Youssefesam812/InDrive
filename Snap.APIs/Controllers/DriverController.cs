@@ -96,10 +96,10 @@ namespace Snap.APIs.Controllers
             return Ok(pendingDrivers);
         }
 
-        [HttpPut("{id}/status")]
-        public async Task<IActionResult> ChangeDriverStatus(int id, [FromBody] ChangeDriverStatusDto dto)
+        [HttpPut("{driverId}/status")]
+        public async Task<IActionResult> ChangeDriverStatus(int driverId, [FromBody] ChangeDriverStatusDto dto)
         {
-            var driver = await _context.Drivers.FindAsync(id);
+            var driver = await _context.Drivers.FindAsync(driverId);
             if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
 
             var allowed = new[] { "pending", "approved", "reject" };
