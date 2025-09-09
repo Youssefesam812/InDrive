@@ -149,7 +149,6 @@ namespace Snap.APIs.Controllers
             {
                 DriverId = dto.DriverId,
                 Name = dto.Name,
-                Value = dto.Value,
                 Image = dto.Image
             };
             _context.Charges.Add(charge);
@@ -173,7 +172,7 @@ namespace Snap.APIs.Controllers
             if (charge == null) return NotFound(new ApiResponse(404, "Charge not found"));
             if (dto.Action.ToLower() == "approve")
             {
-                charge.Driver.Wallet += charge.Value;
+                charge.Driver.Wallet += dto.value;
                 _context.Charges.Remove(charge);
                 await _context.SaveChangesAsync();
                 return Ok("Charge approved and wallet updated.");
