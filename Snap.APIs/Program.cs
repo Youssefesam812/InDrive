@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Snap.APIs.Errors;
 using Snap.APIs.Extensions;
 using Snap.APIs.Middlewares;
+using Snap.APIs.Hubs;
 using Snap.Core.Entities;
 using Snap.Repository.Data;
 using Snap.Repository.Seeders;
@@ -40,6 +41,9 @@ namespace Snap.APIs
             // Configure Identity Services
             builder.Services.AddIdentityServices();
 
+            // Add SignalR
+            builder.Services.AddSignalR();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.Configure<ApiBehaviorOptions>(
@@ -63,6 +67,15 @@ namespace Snap.APIs
                         policy.AllowAnyOrigin()
                               .AllowAnyHeader()
                               .AllowAnyMethod();
+                    });
+                    
+                options.AddPolicy("SignalRPolicy",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .SetIsOriginAllowed(_ => true);
                     });
             });
 
@@ -109,12 +122,15 @@ namespace Snap.APIs
 
             app.UseCors("AllowAll");
 
-
             app.UseHttpsRedirection();
 
             app.UseAuthentication(); 
             app.UseAuthorization();
+            
             app.MapControllers();
+            
+            // Map SignalR Hub
+            app.MapHub<LocationHub>("/locationHub");
 
             app.Run();
         }
