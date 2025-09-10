@@ -188,5 +188,24 @@ namespace Snap.APIs.Controllers
                 return BadRequest(new ApiResponse(400, "Invalid action. Use 'approve' or 'reject'."));
             }
         }
+
+        // PUT: api/driver/deductwallet
+        [HttpPut("deductwallet")]
+        public async Task<IActionResult> DeductFromWallet([FromBody] DeductWalletDto dto)
+        {
+            if (dto.Amount <= 0)
+                return BadRequest(new ApiResponse(400, "Amount must be greater than zero."));
+
+            var driver = await _context.Drivers.FindAsync(dto.DriverId);
+            if (driver == null)
+                return NotFound(new ApiResponse(404, "Driver not found"));
+
+            if (driver.Wallet < dto.Amount)
+                return BadRequest(new ApiResponse(400, "Insufficient wallet balance."));
+
+            driver.Wallet -= dto.Amount;
+            await _context.SaveChangesAsync();
+            return Ok(new { message = $"{dto.Amount} deducted from wallet. New balance: {driver.Wallet}" });
+        }
     }
 }
