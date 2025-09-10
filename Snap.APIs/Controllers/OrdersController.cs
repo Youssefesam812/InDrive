@@ -50,7 +50,10 @@ namespace Snap.APIs.Controllers
                 Type = dto.Type.ToLower(),
                 Distance = dto.Distance,
                 Notes = dto.Notes,
-                NoPassengers = dto.NoPassengers
+                NoPassengers = dto.NoPassengers,
+                UserImage = user.Image, 
+                UserName = user.FullName,
+                UserPhone = user.PhoneNumber 
             };
 
             _context.Orders.Add(order);
@@ -69,7 +72,10 @@ namespace Snap.APIs.Controllers
                 Type = order.Type,
                 Distance = order.Distance,
                 Notes = order.Notes,
-                NoPassengers = order.NoPassengers
+                NoPassengers = order.NoPassengers,
+                UserImage = order.UserImage,
+                UserName = order.UserName,
+                UserPhone = order.UserPhone
             };
 
             return Ok(result);
@@ -93,7 +99,10 @@ namespace Snap.APIs.Controllers
                     Type = o.Type,
                     Distance = o.Distance,
                     Notes = o.Notes,
-                    NoPassengers = o.NoPassengers
+                    NoPassengers = o.NoPassengers,
+                    UserImage = o.UserImage,
+                    UserName = o.UserName,
+                    UserPhone = o.UserPhone
                 })
                 .ToListAsync();
 
@@ -121,7 +130,10 @@ namespace Snap.APIs.Controllers
                 Type = order.Type,
                 Distance = order.Distance,
                 Notes = order.Notes,
-                NoPassengers = order.NoPassengers
+                NoPassengers = order.NoPassengers,
+                UserImage = order.UserImage,
+                UserName = order.UserName,
+                UserPhone = order.UserPhone
             };
 
             return Ok(dto);

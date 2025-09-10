@@ -23,6 +23,9 @@ namespace Snap.APIs.DTOs
         public double Distance { get; set; }
         public string? Notes { get; set; }
         public int NoPassengers { get; set; }
+        public string? UserImage { get; set; }
+        public string? UserName { get; set; }
+        public string? UserPhone { get; set; }
     }
 
     public class CreateOrderDto

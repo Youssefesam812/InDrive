@@ -11,5 +11,6 @@ namespace Snap.Core.Entities
     {
         public string FullName { get; set; }
         public string UserType { get; set; } // Add UserType property (e.g., "Driver", "Passenger")
+        public string? Image { get; set; } = string.Empty; 
     }
 }

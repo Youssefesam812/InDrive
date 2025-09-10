@@ -43,5 +43,8 @@ namespace Snap.Core.Entities
         public string? Notes { get; set; }
 
         public int NoPassengers { get; set; }
+        public string? UserImage { get; set; }
+        public string? UserName { get; set; }
+        public string? UserPhone { get; set; }
     }
 }

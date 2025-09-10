@@ -224,5 +224,29 @@ namespace Snap.APIs.Controllers
 
             return Ok(new { message = "Password reset successful." });
         }
+
+        // PUT: api/UsersIdentity/UpdateImage/{userId}
+        [HttpPut("UpdateImage/{userId}")]
+        public async Task<IActionResult> UpdateUserImage(string userId, [FromBody] string image)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound(new ApiResponse(404, "User not found."));
+            user.Image = image ?? string.Empty;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(new ApiResponse(400, "Failed to update user image."));
+            return Ok(new { message = "User image updated successfully." });
+        }
+
+        // GET: api/UsersIdentity/GetImage/{userId}
+        [HttpGet("GetImage/{userId}")]
+        public async Task<IActionResult> GetUserImage(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound(new ApiResponse(404, "User not found."));
+            return Ok(new { image = user.Image ?? string.Empty });
+        }
     }
 }
