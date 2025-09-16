@@ -79,7 +79,8 @@ namespace Snap.APIs.Controllers
                 UserName = order.UserName,
                 UserPhone = order.UserPhone,
                 Status = order.Status,
-                Driverid = order.Driverid
+                Driverid = order.Driverid,
+                Review = order.Review
             };
 
             return Ok(result);
@@ -118,6 +119,7 @@ namespace Snap.APIs.Controllers
                     Type = o.Type,
                     Distance = o.Distance,
                     Notes = o.Notes,
+                    Review = o.Review,
                     NoPassengers = o.NoPassengers,
                     UserImage = o.UserImage,
                     UserName = o.UserName,
@@ -149,6 +151,7 @@ namespace Snap.APIs.Controllers
                 Type = order.Type,
                 Distance = order.Distance,
                 Notes = order.Notes,
+                Review = order.Review,
                 NoPassengers = order.NoPassengers,
                 UserImage = order.UserImage,
                 UserName = order.UserName,

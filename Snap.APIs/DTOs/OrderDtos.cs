@@ -28,6 +28,8 @@ namespace Snap.APIs.DTOs
         public string? UserPhone { get; set; }
         public string? Status { get; set; }
         public int? Driverid { get; set; }
+        public double Review { get; set; }
+
     }
 
     public class CreateOrderDto
