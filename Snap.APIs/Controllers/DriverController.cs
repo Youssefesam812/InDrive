@@ -122,6 +122,15 @@ namespace Snap.APIs.Controllers
 
             driver.TotalReview += dto.Review;
             driver.NoReviews += 1;
+
+            if (dto.OrderId != null)
+            {
+                var order = await _context.Orders.FindAsync(dto.OrderId);
+                if (order != null)
+                {
+                    order.Review = dto.Review ; 
+                }
+            }
             await _context.SaveChangesAsync();
             return NoContent();
         }

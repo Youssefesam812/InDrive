@@ -46,5 +46,8 @@ namespace Snap.Core.Entities
         public string? UserImage { get; set; }
         public string? UserName { get; set; }
         public string? UserPhone { get; set; }
+        public string? Status { get; set; } = "pending";
+        public int? Driverid { get; set; }
+        public double Review { get; set; }
     }
 }

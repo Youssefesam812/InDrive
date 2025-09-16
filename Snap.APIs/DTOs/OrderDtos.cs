@@ -26,6 +26,8 @@ namespace Snap.APIs.DTOs
         public string? UserImage { get; set; }
         public string? UserName { get; set; }
         public string? UserPhone { get; set; }
+        public string? Status { get; set; }
+        public int? Driverid { get; set; }
     }
 
     public class CreateOrderDto
@@ -41,5 +43,12 @@ namespace Snap.APIs.DTOs
         public double Distance { get; set; }
         public string? Notes { get; set; }
         public int NoPassengers { get; set; }
+    }
+
+    public class UpdateOrderDriverDto
+    {
+        public int OrderId { get; set; }
+        public int Driverid { get; set; }
+        public string Status { get; set; } = null!;
     }
 }

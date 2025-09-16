@@ -53,7 +53,9 @@ namespace Snap.APIs.Controllers
                 NoPassengers = dto.NoPassengers,
                 UserImage = user.Image, 
                 UserName = user.FullName,
-                UserPhone = user.PhoneNumber 
+                UserPhone = user.PhoneNumber,
+                Status = "pending", 
+                Driverid = null 
             };
 
             _context.Orders.Add(order);
@@ -75,10 +77,27 @@ namespace Snap.APIs.Controllers
                 NoPassengers = order.NoPassengers,
                 UserImage = order.UserImage,
                 UserName = order.UserName,
-                UserPhone = order.UserPhone
+                UserPhone = order.UserPhone,
+                Status = order.Status,
+                Driverid = order.Driverid
             };
 
             return Ok(result);
+        }
+
+        // PUT: api/Orders/driver
+        [HttpPut("driver")]
+        public async Task<IActionResult> UpdateOrderDriver([FromBody] UpdateOrderDriverDto dto)
+        {
+            var order = await _context.Orders.FindAsync(dto.OrderId);
+            if (order == null)
+                return NotFound(new ApiResponse(404, "Order not found"));
+
+            order.Driverid = dto.Driverid;
+            order.Status = dto.Status;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // GET: api/Orders
