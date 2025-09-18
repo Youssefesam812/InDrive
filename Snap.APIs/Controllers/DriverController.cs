@@ -216,5 +216,30 @@ namespace Snap.APIs.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = $"{dto.Amount} deducted from wallet. New balance: {driver.Wallet}" });
         }
+
+        [HttpGet("DriverId/{id}")]
+        public async Task<ActionResult<DriverDto>> GetDriverByDriverId(int id)
+        {
+            var driver = await _context.Drivers.FindAsync(id);
+            if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
+            double avg = 0;
+            if (driver.NoReviews > 0)
+                avg = (double)driver.TotalReview / driver.NoReviews;
+            if (avg > 5) avg = 5;
+            // Get phone number from user table
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == driver.UserId);
+            string phoneNumber = user?.PhoneNumber;
+            var dto = new DriverDto
+            {
+                Id = driver.Id,
+                DriverPhoto = driver.DriverPhoto,
+                DriverFullname = driver.DriverFullname,
+                Email = driver.Email,
+                UserId = driver.UserId,
+                Review = avg,
+                PhoneNumber = phoneNumber != null ? int.Parse(phoneNumber) : (int?)null
+            };
+            return Ok( dto);
+        }
     }
 }

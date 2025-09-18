@@ -22,5 +22,7 @@ namespace Snap.APIs.DTOs
         public string Status { get; set; }
         public double Review { get; set; }
         public double Wallet { get; set; }
+
+        public int? PhoneNumber { get; set; }
     }
 }
