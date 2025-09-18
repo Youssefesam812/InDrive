@@ -23,6 +23,18 @@ namespace Snap.APIs.DTOs
         public double Review { get; set; }
         public double Wallet { get; set; }
 
+    }
+
+    public class DriverIdDto
+    {
+        public int Id { get; set; }
+        public string DriverPhoto { get; set; }
+        public string DriverFullname { get; set; }
+        public string Email { get; set; }
+        public string UserId { get; set; }
+        public double Review { get; set; }
         public int? PhoneNumber { get; set; }
     }
+
+
 }

@@ -218,7 +218,7 @@ namespace Snap.APIs.Controllers
         }
 
         [HttpGet("DriverId/{id}")]
-        public async Task<ActionResult<DriverDto>> GetDriverByDriverId(int id)
+        public async Task<ActionResult<DriverIdDto>> GetDriverByDriverId(int id)
         {
             var driver = await _context.Drivers.FindAsync(id);
             if (driver == null) return NotFound(new ApiResponse(404, "Driver not found"));
@@ -229,7 +229,7 @@ namespace Snap.APIs.Controllers
             // Get phone number from user table
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == driver.UserId);
             string phoneNumber = user?.PhoneNumber;
-            var dto = new DriverDto
+            var dto = new DriverIdDto
             {
                 Id = driver.Id,
                 DriverPhoto = driver.DriverPhoto,
