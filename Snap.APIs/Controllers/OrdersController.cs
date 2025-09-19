@@ -29,9 +29,8 @@ namespace Snap.APIs.Controllers
                 return BadRequest(new ApiResponse(400, "Invalid payload"));
 
             // Validate type
-            var allowedTypes = new[] { "ride", "delivery" };
-            if (string.IsNullOrWhiteSpace(dto.Type) || !allowedTypes.Contains(dto.Type.ToLower()))
-                return BadRequest(new ApiResponse(400, "Invalid type. Allowed: ride, delivery"));
+            if (string.IsNullOrWhiteSpace(dto.Type))
+                return BadRequest(new ApiResponse(400, "Invalid type"));
 
             // Validate user exists
             var user = await _context.Users.FindAsync(dto.UserId);
