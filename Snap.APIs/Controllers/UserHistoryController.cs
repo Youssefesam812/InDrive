@@ -29,9 +29,6 @@ namespace Snap.APIs.Controllers
             if (user == null)
                 return NotFound(new ApiResponse(404, "User not found"));
 
-            // Validate RideType
-            if (dto.RideType != "ride" && dto.RideType != "delivery")
-                return BadRequest(new ApiResponse(400, "RideType must be either 'ride' or 'delivery'."));
 
             var history = new UserHistory
             {
