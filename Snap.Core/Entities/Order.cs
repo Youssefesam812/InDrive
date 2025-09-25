@@ -49,5 +49,6 @@ namespace Snap.Core.Entities
         public string? Status { get; set; } = "pending";
         public int? Driverid { get; set; }
         public double Review { get; set; }
+        public string? PaymentWay { get; set; }
     }
 }

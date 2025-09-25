@@ -54,7 +54,8 @@ namespace Snap.APIs.Controllers
                 UserName = user.FullName,
                 UserPhone = user.PhoneNumber,
                 Status = "pending", 
-                Driverid = null 
+                Driverid = null,
+                PaymentWay = dto.PaymentWay 
             };
 
             _context.Orders.Add(order);
@@ -79,7 +80,8 @@ namespace Snap.APIs.Controllers
                 UserPhone = order.UserPhone,
                 Status = order.Status,
                 Driverid = order.Driverid,
-                Review = order.Review
+                Review = order.Review,
+                PaymentWay = order.PaymentWay 
             };
 
             return Ok(result);
@@ -124,7 +126,8 @@ namespace Snap.APIs.Controllers
                     NoPassengers = o.NoPassengers,
                     UserImage = o.UserImage,
                     UserName = o.UserName,
-                    UserPhone = o.UserPhone
+                    UserPhone = o.UserPhone,
+                    PaymentWay = o.PaymentWay 
                 })
                 .ToListAsync();
 
@@ -158,7 +161,8 @@ namespace Snap.APIs.Controllers
                 NoPassengers = order.NoPassengers,
                 UserImage = order.UserImage,
                 UserName = order.UserName,
-                UserPhone = order.UserPhone
+                UserPhone = order.UserPhone,
+                PaymentWay = order.PaymentWay 
             };
 
             return Ok(dto);

@@ -29,6 +29,7 @@ namespace Snap.APIs.DTOs
         public string? Status { get; set; }
         public int? Driverid { get; set; }
         public double Review { get; set; }
+        public string? PaymentWay { get; set; }
 
     }
 
@@ -45,6 +46,7 @@ namespace Snap.APIs.DTOs
         public double Distance { get; set; }
         public string? Notes { get; set; }
         public int NoPassengers { get; set; }
+        public string? PaymentWay { get; set; }
     }
 
     public class UpdateOrderDriverDto
